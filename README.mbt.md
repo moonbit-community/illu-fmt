@@ -81,7 +81,7 @@ test "endianness formatting" {
   inspect(
     bytes_of_memory(buf, be_ofs),
     content=(
-      #|b"\x12\x34\x56\x78"
+      #|b"\x124Vx"
     ),
   )
 
@@ -90,7 +90,7 @@ test "endianness formatting" {
   inspect(
     bytes_of_memory(buf, le_ofs),
     content=(
-      #|b"\x78\x56\x34\x12"
+      #|b"xV4\x12"
     ),
   )
 }

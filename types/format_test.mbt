@@ -340,7 +340,7 @@ test "BigEndian Int" {
   inspect(
     bytes_view_of_memory(buffer, 0, offset),
     content=(
-      #|b"\x12\x34\x56\x78"
+      #|b"\x124Vx"
     ),
   )
   let offset = @fmt.Format::write(@fmt.BigEndian(-1), buffer, 0)
@@ -366,7 +366,7 @@ test "LittleEndian Int" {
   inspect(
     bytes_view_of_memory(buffer, 0, offset),
     content=(
-      #|b"\x78\x56\x34\x12"
+      #|b"xV4\x12"
     ),
   )
   let offset = @fmt.Format::write(@fmt.LittleEndian(-1), buffer, 0)
@@ -392,7 +392,7 @@ test "BigEndian UInt" {
   inspect(
     bytes_view_of_memory(buffer, 0, offset),
     content=(
-      #|b"\x12\x34\x56\x78"
+      #|b"\x124Vx"
     ),
   )
   let offset = @fmt.Format::write(@fmt.BigEndian(0xFFFFFFFFU), buffer, 0)
@@ -418,7 +418,7 @@ test "LittleEndian UInt" {
   inspect(
     bytes_view_of_memory(buffer, 0, offset),
     content=(
-      #|b"\x78\x56\x34\x12"
+      #|b"xV4\x12"
     ),
   )
   let offset = @fmt.Format::write(@fmt.LittleEndian(0xFFFFFFFFU), buffer, 0)
