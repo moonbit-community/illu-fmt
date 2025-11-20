@@ -19,10 +19,10 @@ pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with write(
   buffer,
   start,
 ) {
-  T::write(value.inner(), buffer, start)
+  T::write(value.0, buffer, start)
 }
 
 ///|
 pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with count(self) {
-  T::count(self.inner())
+  T::count(self.0)
 }

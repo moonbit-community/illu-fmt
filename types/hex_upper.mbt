@@ -19,10 +19,10 @@ pub impl[T : HexUpperFormat] Format for HexUpper[T] with write(
   buffer,
   start,
 ) {
-  T::write(value.inner(), buffer, start)
+  T::write(value.0, buffer, start)
 }
 
 ///|
 pub impl[T : HexUpperFormat] Format for HexUpper[T] with count(self) {
-  T::count(self.inner())
+  T::count(self.0)
 }

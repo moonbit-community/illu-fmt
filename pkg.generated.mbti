@@ -9,7 +9,7 @@ import(
 // Values
 fn[T] big_endian(T) -> @types.BigEndian[T]
 
-fn[Self : @types.Format] count(Self) -> Int
+fn[T : @types.Format] count(T) -> Int
 
 fn format_count(Bytes, Array[&@types.Format]) -> Int raise
 
@@ -27,16 +27,16 @@ fn[T] padding_left(T, width~ : Int, padding~ : Byte) -> @padding.Left[T]
 
 fn[T] padding_right(T, width~ : Int, padding~ : Byte) -> @padding.Right[T]
 
-fn[Self : @types.Format] write(Self, @types.Memory, Int) -> Int
+fn[T : @types.Format] write(T, @types.Memory, Int) -> Int
 
 // Errors
 
 // Types and methods
 
 // Type aliases
-pub typealias @types.Memory as Memory
+pub using @types {type Memory}
 
-pub traitalias @types.Format as Format
+using @types {trait Format}
 
 // Traits
 
