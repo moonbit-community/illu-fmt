@@ -1,8 +1,19 @@
 ///|
-pub fnalias @types.(format_write, format_count)
+pub using @types {format_write, format_count}
 
 ///|
-pub fnalias @types.Format::(count, write)
+pub fn[T : @types.Format] count(value : T) -> Int {
+  @types.Format::count(value)
+}
+
+///|
+pub fn[T : @types.Format] write(
+  value : T,
+  buffer : @types.Memory,
+  start : Int,
+) -> Int {
+  @types.Format::write(value, buffer, start)
+}
 
 ///|
 pub fn[T] big_endian(x : T) -> @types.BigEndian[T] {
@@ -52,7 +63,7 @@ pub fn[T] padding_right(
 }
 
 ///|
-pub typealias @types.Memory
+pub using @types {type Memory}
 
 ///|
-pub traitalias @types.Format
+pub using @types {trait Format}

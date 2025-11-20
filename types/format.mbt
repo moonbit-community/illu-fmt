@@ -20,7 +20,7 @@ fn find_first_placeholder(format : Bytes) -> Int? {
 }
 
 ///|
-fn split_format(format : @bytes.View) -> (Array[@bytes.View], Int) {
+fn split_format(format : BytesView) -> (Array[BytesView], Int) {
   let mut count = 1
   let snippets = []
   let mut start = 0

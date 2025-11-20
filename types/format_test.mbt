@@ -15,7 +15,7 @@ fn bytes_view_of_memory(
   memory : @fmt.Memory,
   start : Int,
   end : Int,
-) -> @bytes.View {
+) -> BytesView {
   bytes_of_memory(memory)[start:end]
 }
 
