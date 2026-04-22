@@ -1,8 +1,0 @@
-{
-  "import": ["moonbitlang/core/math"],
-  "test-import": [
-    "moonbitlang/core/bench",
-    "moonbitlang/core/buffer",
-    { "path": "illusory0x0/fmt/types", "alias": "fmt" }
-  ]
-}

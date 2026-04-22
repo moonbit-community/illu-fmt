@@ -1,0 +1,9 @@
+import {
+  "moonbitlang/core/math",
+}
+
+import {
+  "moonbitlang/core/bench",
+  "moonbitlang/core/buffer",
+  "illusory0x0/fmt/types" @fmt,
+} for "test"
