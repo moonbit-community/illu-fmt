@@ -5,7 +5,7 @@ pub impl Format for Int with write(value, buffer, start) {
     Format::write(value, buffer, start)
   } else {
     let value = (-value).reinterpret_as_uint()
-    buffer[start] = '-'
+    buffer[start] = b'-'
     Format::write(value, buffer, start + 1) + 1
   }
 }
