@@ -1,5 +1,5 @@
 ///|
-pub impl[A : Format, B : Format] Format for Iter2[A, B] with write(
+pub impl[A : Format, B : Format] Format for Iter2[A, B] with fn write(
   value,
   buffer,
   start,
@@ -22,7 +22,7 @@ pub impl[A : Format, B : Format] Format for Iter2[A, B] with write(
 
 ///|
 /// supremum
-pub impl[A : Format, B : Format] Format for Iter2[A, B] with count(self) -> Int {
+pub impl[A : Format, B : Format] Format for Iter2[A, B] with fn count(self) -> Int32 {
   let mut supremum = 1 // for '['
   for x, y in self {
     // 4 for '(', ',', ')', ','

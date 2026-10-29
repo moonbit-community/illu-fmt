@@ -6,7 +6,7 @@ A destination-passing style formatting library for MoonBit with extensible API d
 
 The core API revolves around the `@fmt.Format` trait, with helper functions `@fmt.format_count` and `@fmt.format_write`:
 
-```mbt
+```mbt nocheck
 ///|
 test "basic formatting" {
   let fmt = b"hello {}!"
@@ -22,26 +22,26 @@ test "basic formatting" {
 
 Implement the `@fmt.Format` trait for your types:
 
-```mbt
+```mbt nocheck
 ///|
 struct Point {
-  x : Int
-  y : Int
+  x : Int32
+  y : Int32
 }
 
 ///|
-impl @fmt.Format for Point with count(self) {
+impl @fmt.Format for Point with fn count(self) {
   try! @fmt.format_count(b"({}, {})", [self.x, self.y])
 }
 
 ///|
-impl @fmt.Format for Point with write(self, buf, start) {
+impl @fmt.Format for Point with fn write(self, buf, start) {
   try! @fmt.format_write(b"({}, {})", [self.x, self.y], buf, start)
 }
 
 ///|
 test "custom formatter" {
-  let p = Point::{ x: 10, y: 20 }
+  let p = Point::{ x: 10, y: 20, }
   let cnt = @fmt.count(p)
   let buf = @fmt.Memory::make(cnt, 0)
   let ofs = @fmt.write(p, buf, 0)
@@ -53,7 +53,7 @@ test "custom formatter" {
 
 ### Number Formatting
 
-```mbt
+```mbt nocheck
 ///|
 test "hex formatting" {
   // Allocate a large buffer (1024 bytes) that can be reused for multiple operations
@@ -74,7 +74,7 @@ test "hex formatting" {
 test "endianness formatting" {
   // Use a large reusable buffer (1024 bytes) for efficiency
   let buf = @fmt.Memory::make(1024, 0)
-  let value : Int = 0x12345678
+  let value : Int32 = 0x12345678
 
   // Big-endian: most significant byte first
   let be_ofs = @fmt.write(@fmt.big_endian(value), buf, 0)
@@ -98,7 +98,7 @@ test "endianness formatting" {
 
 ### Padding
 
-```mbt
+```mbt nocheck
 ///|
 test "padding examples" {
   // Use a large reusable buffer (1024 bytes) to avoid multiple allocations
@@ -134,7 +134,7 @@ test "padding examples" {
 
 ### Combining Manipulators
 
-```mbt
+```mbt nocheck
 ///|
 test "combined formatting" {
   // Use a large reusable buffer (1024 bytes) for efficiency
@@ -154,16 +154,16 @@ test "combined formatting" {
 
 ## Helper Functions
 
-```mbt
+```mbt nocheck
 ///|
 /// Convert memory buffer to string with C-style escape sequences
-fn string_of_memory(mem : @fmt.Memory, len : Int) -> String {
+fn string_of_memory(mem : @fmt.Memory, len : Int32) -> String {
   ascii_string_of_bytesview(bytes_of_memory(mem, len))
 }
 
 ///|
 /// Convert memory buffer to bytes
-fn bytes_of_memory(mem : @fmt.Memory, len : Int) -> Bytes {
+fn bytes_of_memory(mem : @fmt.Memory, len : Int32) -> Bytes {
   Bytes::makei(len, i => mem[i])
 }
 

@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "illusory0x0/fmt/padding"
 
-import(
-  "illusory0x0/fmt/types"
-)
+import {
+  "illusory0x0/fmt/types",
+}
 
 // Values
 
@@ -11,21 +11,26 @@ import(
 
 // Types and methods
 pub(all) enum Center[T] {
-  Center(T, width~ : Int, padding~ : Byte)
+  Center(T, width~ : Int32, padding~ : Byte)
 }
-impl[T : @types.Format] @types.Format for Center[T]
+pub fn[T : @types.Format] Center::count(Self[T]) -> Int32
+pub fn[T : @types.Format] Center::write(Self[T], @types.Memory, Int32) -> Int32
+pub impl[T : @types.Format] @types.Format for Center[T]
 
 pub(all) enum Left[T] {
-  Left(T, width~ : Int, padding~ : Byte)
+  Left(T, width~ : Int32, padding~ : Byte)
 }
-impl[T : @types.Format] @types.Format for Left[T]
+pub fn[T : @types.Format] Left::count(Self[T]) -> Int32
+pub fn[T : @types.Format] Left::write(Self[T], @types.Memory, Int32) -> Int32
+pub impl[T : @types.Format] @types.Format for Left[T]
 
 pub(all) enum Right[T] {
-  Right(T, width~ : Int, padding~ : Byte)
+  Right(T, width~ : Int32, padding~ : Byte)
 }
-impl[T : @types.Format] @types.Format for Right[T]
+pub fn[T : @types.Format] Right::count(Self[T]) -> Int32
+pub fn[T : @types.Format] Right::write(Self[T], @types.Memory, Int32) -> Int32
+pub impl[T : @types.Format] @types.Format for Right[T]
 
 // Type aliases
 
 // Traits
-

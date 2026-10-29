@@ -1,8 +1,8 @@
 /// provides utility functions for black-box testing
 
 ///|
-fn memory_to_string(memory : @fmt.Memory, end : Int) -> String {
-  let buf = StringBuilder::new()
+fn memory_to_string(memory : @fmt.Memory, end : Int32) -> String {
+  let buf = StringBuilder()
   for i in 0..<end {
     buf.write_char(memory[i].to_char())
   }
@@ -15,8 +15,8 @@ fn bytes_of_memory(memory : @fmt.Memory) -> Bytes = "%identity"
 ///|
 fn bytes_view_of_memory(
   memory : @fmt.Memory,
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> BytesView {
   bytes_of_memory(memory)[start:end]
 }

@@ -1,13 +1,13 @@
 ///|
 pub(all) enum Center[T] {
-  Center(T, width~ : Int, padding~ : Byte)
+  Center(T, width~ : Int32, padding~ : Byte)
 }
 
 ///|
-pub impl[T : @fmt.Format] @fmt.Format for Center[T] with write(
+pub impl[T : @fmt.Format] @fmt.Format for Center[T] with fn write(
   value : Center[T],
   buffer : @fmt.Memory,
-  start : Int,
+  start : Int32,
 ) {
   let Center(value, width~, padding~) = value
   let cnt = @fmt.Format::write(value, buffer, start)
@@ -36,7 +36,7 @@ pub impl[T : @fmt.Format] @fmt.Format for Center[T] with write(
 }
 
 ///|
-pub impl[T : @fmt.Format] @fmt.Format for Center[T] with count(
+pub impl[T : @fmt.Format] @fmt.Format for Center[T] with fn count(
   value : Center[T],
 ) {
   let Center(value, width~, padding~) = value

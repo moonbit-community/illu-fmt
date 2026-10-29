@@ -2,7 +2,7 @@
 pub using @types {format_write, format_count}
 
 ///|
-pub fn[T : @types.Format] count(value : T) -> Int {
+pub fn[T : @types.Format] count(value : T) -> Int32 {
   @types.Format::count(value)
 }
 
@@ -10,8 +10,8 @@ pub fn[T : @types.Format] count(value : T) -> Int {
 pub fn[T : @types.Format] write(
   value : T,
   buffer : @types.Memory,
-  start : Int,
-) -> Int {
+  start : Int32,
+) -> Int32 {
   @types.Format::write(value, buffer, start)
 }
 
@@ -38,7 +38,7 @@ pub fn[T] hex_upper(x : T) -> @types.HexUpper[T] {
 ///|
 pub fn[T] padding_center(
   x : T,
-  width~ : Int,
+  width~ : Int32,
   padding~ : Byte,
 ) -> @padding.Center[T] {
   @padding.Center(x, width~, padding~)
@@ -47,7 +47,7 @@ pub fn[T] padding_center(
 ///|
 pub fn[T] padding_left(
   x : T,
-  width~ : Int,
+  width~ : Int32,
   padding~ : Byte,
 ) -> @padding.Left[T] {
   @padding.Left(x, width~, padding~)
@@ -56,7 +56,7 @@ pub fn[T] padding_left(
 ///|
 pub fn[T] padding_right(
   x : T,
-  width~ : Int,
+  width~ : Int32,
   padding~ : Byte,
 ) -> @padding.Right[T] {
   @padding.Right(x, width~, padding~)

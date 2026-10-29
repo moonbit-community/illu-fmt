@@ -1,5 +1,5 @@
 ///|
-pub impl Format for Bytes with write(value, buffer, start) {
+pub impl Format for Bytes with fn write(value, buffer, start) {
   for i in 0..<value.length() {
     buffer[start + i] = value[i]
   }
@@ -8,6 +8,6 @@ pub impl Format for Bytes with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl Format for Bytes with count(self) -> Int {
+pub impl Format for Bytes with fn count(self) -> Int32 {
   self.length()
 }
