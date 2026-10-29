@@ -3,10 +3,10 @@
 ///|
 fn memory_copy_forward(
   dst~ : @fmt.Memory,
-  dst_start~ : Int,
+  dst_start~ : Int32,
   src~ : @fmt.Memory,
-  src_start~ : Int,
-  len~ : Int,
+  src_start~ : Int32,
+  len~ : Int32,
 ) -> Unit {
   let dst_end = dst_start + len
   for dst_ofs = dst_start, src_ofs = src_start
@@ -19,10 +19,10 @@ fn memory_copy_forward(
 ///|
 fn memory_copy_backward(
   dst~ : @fmt.Memory,
-  dst_start~ : Int,
+  dst_start~ : Int32,
   src~ : @fmt.Memory,
-  src_start~ : Int,
-  len~ : Int,
+  src_start~ : Int32,
+  len~ : Int32,
 ) -> Unit {
   for dst_ofs = dst_start + len - 1, src_ofs = src_start + len - 1
       dst_ofs >= dst_start
@@ -34,8 +34,8 @@ fn memory_copy_backward(
 ///|
 fn memory_fill(
   memory~ : @fmt.Memory,
-  start~ : Int,
-  len~ : Int,
+  start~ : Int32,
+  len~ : Int32,
   value~ : Byte,
 ) -> Unit {
   for ofs = start; ofs < start + len; ofs = ofs + 1 {

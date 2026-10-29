@@ -1,0 +1,13 @@
+name = "illusory0x0/fmt"
+
+version = "0.4.1"
+
+readme = "README.md"
+
+repository = "https://github.com/moonbit-community/illu-fmt"
+
+license = "Apache-2.0"
+
+keywords = [ "formatting", "string", "display", "print" ]
+
+description = "A destination passing style formatting library for MoonBit"

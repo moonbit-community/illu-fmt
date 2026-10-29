@@ -8,13 +8,13 @@ pub(open) trait LittleEndianFormat {
   /// and return the number of bytes written.
   ///
   /// The number of bytes written must not exceed count().
-  write(value : Self, buffer : Memory, start : Int) -> Int
+  fn write(value : Self, buffer : Memory, start : Int32) -> Int32
   /// Upper bound on the number of bytes written
-  count(value : Self) -> Int
+  fn count(value : Self) -> Int32
 }
 
 ///|
-pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with write(
+pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with fn write(
   value,
   buffer,
   start,
@@ -23,6 +23,6 @@ pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with write(
 }
 
 ///|
-pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with count(self) {
+pub impl[T : LittleEndianFormat] Format for LittleEndian[T] with fn count(self) {
   T::count(self.0)
 }

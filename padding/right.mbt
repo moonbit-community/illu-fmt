@@ -1,13 +1,13 @@
 ///|
 pub(all) enum Right[T] {
-  Right(T, width~ : Int, padding~ : Byte)
+  Right(T, width~ : Int32, padding~ : Byte)
 }
 
 ///|
-pub impl[T : @fmt.Format] @fmt.Format for Right[T] with write(
+pub impl[T : @fmt.Format] @fmt.Format for Right[T] with fn write(
   value : Right[T],
   buffer : @fmt.Memory,
-  start : Int,
+  start : Int32,
 ) {
   let Right(value, width~, padding~) = value
   let cnt = @fmt.Format::write(value, buffer, start)
@@ -22,7 +22,9 @@ pub impl[T : @fmt.Format] @fmt.Format for Right[T] with write(
 }
 
 ///|
-pub impl[T : @fmt.Format] @fmt.Format for Right[T] with count(value : Right[T]) {
+pub impl[T : @fmt.Format] @fmt.Format for Right[T] with fn count(
+  value : Right[T],
+) {
   let Right(value, width~, padding~) = value
   let cnt = @fmt.Format::count(value)
   if cnt < width {

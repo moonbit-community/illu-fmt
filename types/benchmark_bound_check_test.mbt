@@ -1,8 +1,8 @@
 ///|
 test (b : @bench.T) {
-  let core_buffer = @buffer.new(size_hint=4096)
+  let core_buffer = Buffer(size_hint=4096)
   let memory : @fmt.Memory = @fmt.Memory::make(4096, 0)
-  let data : UInt = 1234567890
+  let data : UInt32 = 1234567890
   // data.to_string().length() == 10 
   let write_uint_text_temp = FixedArray::make(10, b'\x00')
   b.bench(name="write_uint_text", fn() {
@@ -27,9 +27,9 @@ test (b : @bench.T) {
 
 ///|
 test {
-  let core_buffer = @buffer.new(size_hint=4096)
+  let core_buffer = Buffer(size_hint=4096)
   let memory : @fmt.Memory = @fmt.Memory::make(4096, 0)
-  let data : UInt = 1234567890
+  let data : UInt32 = 1234567890
   // data.to_string().length() == 10 
   let write_uint_text_temp = FixedArray::make(10, b'\x00')
   write_uint_text(data, core_buffer, write_uint_text_temp)
@@ -39,30 +39,30 @@ test {
 
 ///|
 fn write_uint_text(
-  num : UInt,
-  buffer : @buffer.Buffer,
+  num : UInt32,
+  buffer : Buffer,
   temp : FixedArray[Byte],
 ) -> Unit {
   for i = 9, value = num; i >= 0 && value > 0; i = i - 1, value = value / 10 {
     temp[i] = (value % 10 + '0'.to_uint()).to_byte()
-  } else {
+  } nobreak {
     buffer.write_bytesview(temp.unsafe_reinterpret_as_bytes()[i + 1:])
   }
 }
 
 ///|
-fn write_uint_text_with_temp(num : UInt, buffer : @buffer.Buffer) -> Unit {
+fn write_uint_text_with_temp(num : UInt32, buffer : Buffer) -> Unit {
   let temp = FixedArray::make(10, b'\x00')
   for i = 9, value = num; i >= 0 && value > 0; i = i - 1, value = value / 10 {
     temp[i] = (value % 10 + '0'.to_uint()).to_byte()
-  } else {
+  } nobreak {
     buffer.write_bytesview(temp.unsafe_reinterpret_as_bytes()[i + 1:])
   }
 }
 
 ///|
 fn ascii_bytes_to_string(bytes : Bytes) -> String {
-  let buf = StringBuilder::new()
+  let buf = StringBuilder()
   for b in bytes {
     buf.write_char(b.to_char())
   }
@@ -71,7 +71,7 @@ fn ascii_bytes_to_string(bytes : Bytes) -> String {
 
 ///|
 test {
-  let buf = @buffer.new(size_hint=100)
+  let buf = Buffer(size_hint=100)
   let temp = FixedArray::make(10, b'\x00')
   write_uint_text(123456789, buf, temp)
   inspect(buf.to_bytes() |> ascii_bytes_to_string, content="123456789")

@@ -18,20 +18,20 @@
 //
 
 ///|
-fn pow5bits(e : Int) -> Int {
+fn pow5bits(e : Int32) -> Int32 {
   // Returns e == 0 ? 1 : ceil(log_2(5^e)); requires 0 <= e <= 3528.
   ((e * 1217359).reinterpret_as_uint() >> 19).reinterpret_as_int() + 1
 }
 
 ///|
 // Returns floor(log_10(5^e)); requires 0 <= e <= 2620.
-fn log10Pow5(e : Int) -> Int {
+fn log10Pow5(e : Int32) -> Int32 {
   ((e * 732923).reinterpret_as_uint() >> 20).reinterpret_as_int()
 }
 
 ///|
 // Returns floor(log_10(2^e)); requires 0 <= e <= 1650.
-fn log10Pow2(e : Int) -> Int {
+fn log10Pow2(e : Int32) -> Int32 {
   ((e * 78913).reinterpret_as_uint() >> 18).reinterpret_as_int()
 }
 
@@ -51,12 +51,12 @@ fn umul128(a : UInt64, b : UInt64) -> (UInt64, UInt64) {
 }
 
 ///|
-fn shiftright128(lo : UInt64, hi : UInt64, dist : Int) -> UInt64 {
+fn shiftright128(lo : UInt64, hi : UInt64, dist : Int32) -> UInt64 {
   (hi << (64 - dist)) | (lo >> dist)
 }
 
 ///|
-fn pow5Factor(value : UInt64) -> Int {
+fn pow5Factor(value : UInt64) -> Int32 {
   // We want to find the largest power of 5 that divides value.
   if value % 5UL != 0UL {
     return 0
@@ -83,12 +83,12 @@ fn pow5Factor(value : UInt64) -> Int {
 }
 
 ///|
-fn multipleOfPowerOf5(value : UInt64, p : Int) -> Bool {
+fn multipleOfPowerOf5(value : UInt64, p : Int32) -> Bool {
   pow5Factor(value) >= p
 }
 
 ///|
-fn multipleOfPowerOf2(value : UInt64, p : Int) -> Bool {
+fn multipleOfPowerOf2(value : UInt64, p : Int32) -> Bool {
   (value & ((1UL << p) - 1UL)) == 0UL
 }
 
@@ -96,7 +96,7 @@ fn multipleOfPowerOf2(value : UInt64, p : Int) -> Bool {
 fn mulShiftAll64(
   m : UInt64,
   mul : (UInt64, UInt64),
-  j : Int,
+  j : Int32,
   mmShift : Bool,
 ) -> (UInt64, UInt64, UInt64) {
   let m = m << 1
@@ -143,7 +143,7 @@ let gDOUBLE_POW5_INV_SPLIT2 : FixedArray[UInt64] = [
 ]
 
 ///|
-let gPOW5_INV_OFFSETS : FixedArray[UInt] = [
+let gPOW5_INV_OFFSETS : FixedArray[UInt32] = [
   0x54544554, 0x04055545, 0x10041000, 0x00400414, 0x40010000, 0x41155555, 0x00000454,
   0x00010044, 0x40000000, 0x44000041, 0x50454450, 0x55550054, 0x51655554, 0x40004000,
   0x01000001, 0x00010500, 0x51515411, 0x05555554, 0x00000000,
@@ -160,7 +160,7 @@ let gDOUBLE_POW5_SPLIT2 : FixedArray[UInt64] = [
 ]
 
 ///|
-let gPOW5_OFFSETS : FixedArray[UInt] = [
+let gPOW5_OFFSETS : FixedArray[UInt32] = [
   0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x40000000, 0x59695995, 0x55545555,
   0x56555515, 0x41150504, 0x40555410, 0x44555145, 0x44504540, 0x45555550, 0x40004000,
   0x96440440, 0x55565565, 0x54454045, 0x40154151, 0x55559155, 0x51405555, 0x00000105,
@@ -176,7 +176,7 @@ let gDOUBLE_POW5_TABLE : FixedArray[UInt64] = [
 
 ///|
 /// Computes 5^i in the form required by Ryū.
-fn double_computePow5(i : Int) -> (UInt64, UInt64) {
+fn double_computePow5(i : Int32) -> (UInt64, UInt64) {
   let base = i / gPOW5_TABLE_SIZE
   let base2 = base * gPOW5_TABLE_SIZE
   let offset = i - base2
@@ -193,7 +193,7 @@ fn double_computePow5(i : Int) -> (UInt64, UInt64) {
   if sum < high0 {
     high1 = high1 + 1UL
   }
-  let delta : Int = pow5bits(i) - pow5bits(base2)
+  let delta : Int32 = pow5bits(i) - pow5bits(base2)
   let a = shiftright128(low0, sum, delta) +
     ((gPOW5_OFFSETS[i / 16] >> ((i % 16) << 1)) & 3).to_uint64()
   let b = shiftright128(sum, high1, delta)
@@ -202,7 +202,7 @@ fn double_computePow5(i : Int) -> (UInt64, UInt64) {
 
 ///|
 /// Computes 5^-i in the form required by Ryū.
-fn double_computeInvPow5(i : Int) -> (UInt64, UInt64) {
+fn double_computeInvPow5(i : Int32) -> (UInt64, UInt64) {
   let base = (i + gPOW5_TABLE_SIZE - 1) / gPOW5_TABLE_SIZE
   let base2 = base * gPOW5_TABLE_SIZE
   let offset = base2 - i
@@ -219,7 +219,7 @@ fn double_computeInvPow5(i : Int) -> (UInt64, UInt64) {
   if sum < high0 {
     high1 = high1 + 1
   }
-  let delta : Int = pow5bits(base2) - pow5bits(i)
+  let delta : Int32 = pow5bits(base2) - pow5bits(i)
   let a = shiftright128(low0, sum, delta) +
     1 +
     ((gPOW5_INV_OFFSETS[i / 16] >> ((i % 16) << 1)) & 3).to_uint64()
@@ -228,22 +228,22 @@ fn double_computeInvPow5(i : Int) -> (UInt64, UInt64) {
 }
 
 ///|
-let gDOUBLE_MANTISSA_BITS : Int = 52
+let gDOUBLE_MANTISSA_BITS : Int32 = 52
 
 ///|
-let gDOUBLE_EXPONENT_BITS : Int = 11
+let gDOUBLE_EXPONENT_BITS : Int32 = 11
 
 ///|
-let gDOUBLE_BIAS : Int = 1023
+let gDOUBLE_BIAS : Int32 = 1023
 
 ///|
-let gDOUBLE_POW5_INV_BITCOUNT : Int = 125
+let gDOUBLE_POW5_INV_BITCOUNT : Int32 = 125
 
 ///|
-let gDOUBLE_POW5_BITCOUNT : Int = 125
+let gDOUBLE_POW5_BITCOUNT : Int32 = 125
 
 ///|
-fn decimal_length17(v : UInt64) -> Int {
+fn decimal_length17(v : UInt64) -> Int32 {
   // This is slightly faster than a loop.
   // The average output length is 16.38 digits, so we check high-to-low.
   // Function precondition: v is not an 18, 19, or 20-digit number.
@@ -306,7 +306,7 @@ priv struct FloatingDecimal64 {
   mantissa : UInt64
   // Decimal exponent's range is -324 to 308
   // inclusive, and can fit in a short if needed.
-  exponent : Int
+  exponent : Int32
 }
 
 ///|
@@ -317,15 +317,15 @@ priv enum Value {
 }
 
 ///|
-priv enum Repr {
+priv enum FloatRepr {
   Nan
   Negative(Value)
   Positive(Value)
 }
 
 ///|
-fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
-  let mut e2 : Int = 0
+fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt32) -> FloatingDecimal64 {
+  let mut e2 : Int32 = 0
   let mut m2 : UInt64 = 0
   if ieeeExponent == 0 {
     // Denormal number - no implicit leading 1, and the exponent is 1, not 0.
@@ -354,13 +354,13 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
   let mut vr = 0UL
   let mut vp = 0UL
   let mut vm = 0UL
-  let mut e10 : Int = 0
+  let mut e10 : Int32 = 0
   let mut vmIsTrailingZeros = false
   let mut vrIsTrailingZeros = false
   if e2 >= 0 {
     // I tried special-casing q == 0, but there was no effect on performance.
     // This expression is slightly faster than max(0, log10Pow2(e2) - 1).
-    let q : Int = log10Pow2(e2) - (e2 > 3).to_int()
+    let q : Int32 = log10Pow2(e2) - (e2 > 3).to_int()
     e10 = q
     let k = gDOUBLE_POW5_INV_BITCOUNT + pow5bits(q) - 1
     let i = -e2 + q + k
@@ -373,7 +373,7 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
       // This should use q <= 22, but I think 21 is also safe. Smaller values
       // may still be safe, but it's more difficult to reason about them.
       // Only one of mp, mv, and mm can be a multiple of 5, if any.
-      let mvMod5 : Int = mv.to_int() - 5 * (mv / 5UL).to_int()
+      let mvMod5 : Int32 = mv.to_int() - 5 * (mv / 5UL).to_int()
       if mvMod5 == 0 {
         vrIsTrailingZeros = multipleOfPowerOf5(mv, q)
       } else if even {
@@ -390,9 +390,9 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
     }
   } else {
     // This expression is slightly faster than max(0, log10Pow5(-e2) - 1).
-    let q : Int = log10Pow5(-e2) - (-e2 > 1).to_int()
+    let q : Int32 = log10Pow5(-e2) - (-e2 > 1).to_int()
     e10 = q + e2
-    let i : Int = -e2 - q
+    let i : Int32 = -e2 - q
     let k = pow5bits(i) - gDOUBLE_POW5_BITCOUNT
     let j = q - k
     let pow5 = double_computePow5(i)
@@ -415,8 +415,8 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
   }
 
   // Step 4: Find the shortest decimal representation in the interval of valid representations.
-  let mut removed : Int = 0
-  let mut lastRemovedDigit : Int = 0
+  let mut removed : Int32 = 0
+  let mut lastRemovedDigit : Int32 = 0
   let mut output : UInt64 = 0UL
   // On average, we remove ~2 digits.
   if vmIsTrailingZeros || vrIsTrailingZeros {
@@ -427,9 +427,9 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
       if vpDiv10 <= vmDiv10 {
         break
       }
-      let vmMod10 : Int = vm.to_int() - 10 * vmDiv10.to_int()
+      let vmMod10 : Int32 = vm.to_int() - 10 * vmDiv10.to_int()
       let vrDiv10 = vr / 10
-      let vrMod10 : Int = vr.to_int() - 10 * vrDiv10.to_int()
+      let vrMod10 : Int32 = vr.to_int() - 10 * vrDiv10.to_int()
       vmIsTrailingZeros = vmIsTrailingZeros && vmMod10 == 0
       vrIsTrailingZeros = vrIsTrailingZeros && lastRemovedDigit == 0
       lastRemovedDigit = vrMod10
@@ -441,13 +441,13 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
     if vmIsTrailingZeros {
       while true {
         let vmDiv10 = vm / 10
-        let vmMod10 : Int = vm.to_int() - 10 * vmDiv10.to_int()
+        let vmMod10 : Int32 = vm.to_int() - 10 * vmDiv10.to_int()
         if vmMod10 != 0 {
           break
         }
         let vpDiv10 = vp / 10
         let vrDiv10 = vr / 10
-        let vrMod10 : Int = vr.to_int() - 10 * vrDiv10.to_int()
+        let vrMod10 : Int32 = vr.to_int() - 10 * vrDiv10.to_int()
         vrIsTrailingZeros = vrIsTrailingZeros && lastRemovedDigit == 0
         lastRemovedDigit = vrMod10
         vr = vrDiv10
@@ -470,7 +470,7 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
     let vmDiv100 = vm / 100
     if vpDiv100 > vmDiv100 {
       let vrDiv100 = vr / 100
-      let vrMod100 : Int = vr.to_int() - 100 * vrDiv100.to_int()
+      let vrMod100 : Int32 = vr.to_int() - 100 * vrDiv100.to_int()
       roundUp = vrMod100 >= 50
       vr = vrDiv100
       vp = vpDiv100
@@ -488,7 +488,7 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
         break
       }
       let vrDiv10 = vr / 10
-      let vrMod10 : Int = vr.to_int() - 10 * vrDiv10.to_int()
+      let vrMod10 : Int32 = vr.to_int() - 10 * vrDiv10.to_int()
       roundUp = vrMod10 >= 5
       vr = vrDiv10
       vp = vpDiv10
@@ -497,27 +497,27 @@ fn d2d(ieeeMantissa : UInt64, ieeeExponent : UInt) -> FloatingDecimal64 {
     }
     output = vr + (vr == vm || roundUp).to_uint64()
   }
-  let exp : Int = e10 + removed
-  let fd : FloatingDecimal64 = { mantissa: output, exponent: exp }
+  let exp : Int32 = e10 + removed
+  let fd : FloatingDecimal64 = { mantissa: output, exponent: exp, }
   fd
 }
 
 ///|
 fn write_floating_decimal64_to_memory(
   dst : Memory,
-  start : Int,
+  start : Int32,
   v : FloatingDecimal64,
   sign : Bool,
-) -> Int {
+) -> Int32 {
   // Step 5: Print the decimal representation.
-  let mut index : Int = start
+  let mut index : Int32 = start
   if sign {
     dst[index] = b'-'
     index += 1
   }
   let mut output = v.mantissa
   let olength = decimal_length17(output)
-  let mut exp : Int = v.exponent + olength - 1
+  let mut exp : Int32 = v.exponent + olength - 1
   let scientificNotation = !(exp >= -6 && exp < 21)
   if scientificNotation {
     // Print the decimal digits.
@@ -612,10 +612,10 @@ fn write_floating_decimal64_to_memory(
 ///|
 fn d2d_small_int(
   ieeeMantissa : UInt64,
-  ieeeExponent : Int,
+  ieeeExponent : Int32,
 ) -> FloatingDecimal64? {
   let m2 : UInt64 = (1UL << gDOUBLE_MANTISSA_BITS) | ieeeMantissa
-  let e2 : Int = ieeeExponent - gDOUBLE_BIAS - gDOUBLE_MANTISSA_BITS
+  let e2 : Int32 = ieeeExponent - gDOUBLE_BIAS - gDOUBLE_MANTISSA_BITS
   if e2 > 0 {
     return None
   }
@@ -627,11 +627,11 @@ fn d2d_small_int(
   if fraction != 0UL {
     return None
   }
-  Some({ mantissa: m2 >> -e2, exponent: 0 })
+  Some({ mantissa: m2 >> -e2, exponent: 0, })
 }
 
 ///|
-fn ryu_special_repr(sign : Bool, exponent : Bool, mantissa : Bool) -> Repr {
+fn ryu_special_repr(sign : Bool, exponent : Bool, mantissa : Bool) -> FloatRepr {
   if mantissa {
     Nan
   } else {
@@ -645,7 +645,7 @@ fn ryu_special_repr(sign : Bool, exponent : Bool, mantissa : Bool) -> Repr {
 }
 
 ///|
-fn ryu_to_repr(val : Double) -> Repr {
+fn ryu_to_repr(val : Double) -> FloatRepr {
   if val == 0.0 {
     return Positive(Zero)
   }
@@ -658,13 +658,13 @@ fn ryu_to_repr(val : Double) -> Repr {
     ) !=
     0UL
   let ieeeMantissa : UInt64 = bits & ((1UL << gDOUBLE_MANTISSA_BITS) - 1UL)
-  let ieeeExponent : Int = ((bits >> gDOUBLE_MANTISSA_BITS) &
+  let ieeeExponent : Int32 = ((bits >> gDOUBLE_MANTISSA_BITS) &
   ((1UL << gDOUBLE_EXPONENT_BITS) - 1UL)).to_int()
   if ieeeExponent == (1 << gDOUBLE_EXPONENT_BITS) - 1 ||
     (ieeeExponent == 0 && ieeeMantissa == 0UL) {
     return ryu_special_repr(ieeeSign, ieeeExponent != 0, ieeeMantissa != 0UL)
   }
-  let mut v : FloatingDecimal64 = { mantissa: 0UL, exponent: 0 }
+  let mut v : FloatingDecimal64 = { mantissa: 0UL, exponent: 0, }
   let small = d2d_small_int(ieeeMantissa, ieeeExponent)
   match small {
     Some(f) => {
@@ -675,7 +675,7 @@ fn ryu_to_repr(val : Double) -> Repr {
         if r != 0 {
           break
         }
-        x = { mantissa: q, exponent: x.exponent + 1 }
+        x = { mantissa: q, exponent: x.exponent + 1, }
       }
       v = x
     }
@@ -689,7 +689,7 @@ fn ryu_to_repr(val : Double) -> Repr {
 }
 
 ///|
-fn memcpy(dst : Memory, ofs : Int, src : Bytes) -> Int {
+fn memcpy(dst : Memory, ofs : Int32, src : Bytes) -> Int32 {
   for i in 0..<src.length() {
     dst[ofs + i] = src[i]
   }

@@ -1,5 +1,5 @@
 ///|
-pub impl[A : Format] Format for Iter[A] with write(value, buffer, start) {
+pub impl[A : Format] Format for Iter[A] with fn write(value, buffer, start) {
   let mut offset = start
   offset += Format::write(b'[', buffer, offset)
   for x in value {
@@ -13,7 +13,7 @@ pub impl[A : Format] Format for Iter[A] with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl[A : Format] Format for Iter[A] with count(self) -> Int {
+pub impl[A : Format] Format for Iter[A] with fn count(self) -> Int32 {
   // init = 1 for '['
   // +1 for each ','
   // overwrite last ',' with ']'

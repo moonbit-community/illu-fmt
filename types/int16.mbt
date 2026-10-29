@@ -1,17 +1,17 @@
 ///|
-pub impl Format for Int16 with write(value, buffer, start) {
+pub impl Format for Int16 with fn write(value, buffer, start) {
   let value32 = value.to_int()
   Format::write(value32, buffer, start)
 }
 
 ///|
 /// supremum
-pub impl Format for Int16 with count(_) -> Int {
+pub impl Format for Int16 with fn count(_) -> Int32 {
   Int16_Digits10
 }
 
 ///|
-pub impl LittleEndianFormat for Int16 with write(value, buffer, start) {
+pub impl LittleEndianFormat for Int16 with fn write(value, buffer, start) {
   let b0 = (value.to_int() & 0xFF).to_byte()
   let b1 = ((value.to_int() >> 8) & 0xFF).to_byte()
   buffer[start + 0] = b0
@@ -21,12 +21,12 @@ pub impl LittleEndianFormat for Int16 with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl LittleEndianFormat for Int16 with count(_) -> Int {
+pub impl LittleEndianFormat for Int16 with fn count(_) -> Int32 {
   2
 }
 
 ///|
-pub impl BigEndianFormat for Int16 with write(value, buffer, start) {
+pub impl BigEndianFormat for Int16 with fn write(value, buffer, start) {
   let b0 = ((value.to_int() >> 8) & 0xFF).to_byte()
   let b1 = (value.to_int() & 0xFF).to_byte()
   buffer[start + 0] = b0
@@ -36,30 +36,30 @@ pub impl BigEndianFormat for Int16 with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl BigEndianFormat for Int16 with count(_) -> Int {
+pub impl BigEndianFormat for Int16 with fn count(_) -> Int32 {
   2
 }
 
 ///|
-pub impl HexLowerFormat for Int16 with write(value, buffer, start) {
+pub impl HexLowerFormat for Int16 with fn write(value, buffer, start) {
   let value_uint = value.to_int().reinterpret_as_uint() & 0xFFFF
   HexLowerFormat::write(value_uint, buffer, start)
 }
 
 ///|
 /// supremum
-pub impl HexLowerFormat for Int16 with count(_) -> Int {
+pub impl HexLowerFormat for Int16 with fn count(_) -> Int32 {
   4
 }
 
 ///|
-pub impl HexUpperFormat for Int16 with write(value, buffer, start) {
+pub impl HexUpperFormat for Int16 with fn write(value, buffer, start) {
   let value_uint = value.to_int().reinterpret_as_uint() & 0xFFFF
   HexUpperFormat::write(value_uint, buffer, start)
 }
 
 ///|
 /// supremum
-pub impl HexUpperFormat for Int16 with count(_) -> Int {
+pub impl HexUpperFormat for Int16 with fn count(_) -> Int32 {
   4
 }

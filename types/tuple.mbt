@@ -1,5 +1,5 @@
 ///|
-pub impl[A : Format, B : Format] Format for (A, B) with write(
+pub impl[A : Format, B : Format] Format for (A, B) with fn write(
   value,
   buffer,
   start,
@@ -14,7 +14,7 @@ pub impl[A : Format, B : Format] Format for (A, B) with write(
 }
 
 ///|
-pub impl[A : Format, B : Format] Format for (A, B) with count(self) -> Int {
+pub impl[A : Format, B : Format] Format for (A, B) with fn count(self) -> Int32 {
   // 3 for '(', ',', ')'
   3 + self.0.count() + self.1.count()
 }

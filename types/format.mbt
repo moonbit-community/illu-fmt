@@ -5,29 +5,29 @@ pub(open) trait Format {
   /// and return the number of bytes written.
   ///
   /// The number of bytes written must not exceed count().
-  write(value : Self, buffer : Memory, start : Int) -> Int
+  fn write(value : Self, buffer : Memory, start : Int32) -> Int32
   /// Upper bound on the number of bytes written
-  count(value : Self) -> Int
+  fn count(value : Self) -> Int32
 }
 
 ///|
-fn find_first_placeholder(format : Bytes) -> Int? {
+fn find_first_placeholder(format : Bytes) -> Int32? {
   loop (0, format[:]) {
     (_, []) => None
-    (index, ['{', '}', ..]) => Some(index)
+    (index, [b'{', b'}', ..]) => Some(index)
     (index, [_, .. cs]) => continue (index + 1, cs)
   }
 }
 
 ///|
-fn split_format(format : BytesView) -> (Array[BytesView], Int) {
+fn split_format(format : BytesView) -> (Array[BytesView], Int32) {
   let mut count = 1
   let snippets = []
   let mut start = 0
   let mut index = 0
   loop format[:] {
     [] => snippets.push(format[start:index])
-    ['{', '}', .. cs] => {
+    [b'{', b'}', .. cs] => {
       snippets.push(format[start:index])
       start = index + 2
       index += 2
@@ -47,8 +47,8 @@ pub fn format_write(
   format : Bytes,
   data : Array[&Format],
   buffer : Memory,
-  start : Int,
-) -> Int raise {
+  start : Int32,
+) -> Int32 raise {
   match find_first_placeholder(format) {
     None => {
       guard format.length() <= buffer.length() else { fail("out of bound") }
@@ -87,7 +87,7 @@ pub fn format_write(
 /// Use this function to determine buffer size before calling `format_write` with 
 /// the same arguments. The actual bytes written by `format_write` will never 
 /// exceed this count.
-pub fn format_count(format : Bytes, data : Array[&Format]) -> Int raise {
+pub fn format_count(format : Bytes, data : Array[&Format]) -> Int32 raise {
   match find_first_placeholder(format) {
     None => {
       guard data.length() == 0 else {
@@ -110,4 +110,11 @@ pub fn format_count(format : Bytes, data : Array[&Format]) -> Int raise {
 }
 
 ///|
-priv suberror DebugError String derive(Show)
+priv suberror DebugError {
+  DebugError(String)
+} derive(Debug)
+
+///|
+impl Show for DebugError with fn output(self, logger) {
+  logger.write_object(@debug.Repr(self))
+}

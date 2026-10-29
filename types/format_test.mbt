@@ -1,6 +1,6 @@
 ///|
-fn memory_to_string(memory : @fmt.Memory, end : Int) -> String {
-  let buf = StringBuilder::new()
+fn memory_to_string(memory : @fmt.Memory, end : Int32) -> String {
+  let buf = StringBuilder()
   for i in 0..<end {
     buf.write_char(memory[i].to_char())
   }
@@ -13,8 +13,8 @@ fn bytes_of_memory(memory : @fmt.Memory) -> Bytes = "%identity"
 ///|
 fn bytes_view_of_memory(
   memory : @fmt.Memory,
-  start : Int,
-  end : Int,
+  start : Int32,
+  end : Int32,
 ) -> BytesView {
   bytes_of_memory(memory)[start:end]
 }
@@ -81,7 +81,7 @@ test "Iter" {
   inspect(memory_to_string(buffer, offset), content="[1,2,3]")
   let offset = @fmt.Format::write([1.23, 2.34, 3.45].iter(), buffer, 0)
   inspect(memory_to_string(buffer, offset), content="[1.23,2.34,3.45]")
-  let map : Map[Bytes, Double] = { "pi": 3.14, "e": 2.71 }
+  let map : Map[Bytes, Double] = { b"pi": 3.14, b"e": 2.71 }
   let offset = @fmt.Format::write(map.iter(), buffer, 0)
   inspect(memory_to_string(buffer, offset), content="[(pi,3.14),(e,2.71)]")
 }
@@ -89,7 +89,7 @@ test "Iter" {
 ///|
 test "Iter2" {
   let buffer = @fmt.Memory::make(1024, Byte::default())
-  let map : Map[Bytes, Double] = { "pi": 3.14, "e": 2.71 }
+  let map : Map[Bytes, Double] = { b"pi": 3.14, b"e": 2.71 }
   let offset = @fmt.Format::write(map.iter2(), buffer, 0)
   inspect(memory_to_string(buffer, offset), content="[(pi,3.14),(e,2.71)]")
 }
@@ -275,13 +275,17 @@ test "format_write format dsl error" {
   }
 
   inspect(
-    try? str(b"hello {} world", []),
+    Ok(str(b"hello {} world", [])) catch {
+      e => Err(e)
+    },
     content=(
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),
   )
   inspect(
-    try? str(b"hello {} world", [1, 2]),
+    Ok(str(b"hello {} world", [1, 2])) catch {
+      e => Err(e)
+    },
     content=(
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),
@@ -312,13 +316,17 @@ test "format_count" {
 
   // Test error cases - mismatched placeholder count
   inspect(
-    try? @fmt.format_count(b"Hello {} world", []),
+    Ok(@fmt.format_count(b"Hello {} world", [])) catch {
+      e => Err(e)
+    },
     content=(
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),
   )
   inspect(
-    try? @fmt.format_count(b"Hello {} world", [1, 2]),
+    Ok(@fmt.format_count(b"Hello {} world", [1, 2])) catch {
+      e => Err(e)
+    },
     content=(
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),

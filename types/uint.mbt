@@ -1,5 +1,5 @@
 ///|
-fn reverse(xs : Memory, start : Int, end : Int) -> Unit {
+fn reverse(xs : Memory, start : Int32, end : Int32) -> Unit {
   let mut i = start
   let mut j = end - 1
   while i < j {
@@ -12,16 +12,16 @@ fn reverse(xs : Memory, start : Int, end : Int) -> Unit {
 }
 
 ///|
-pub impl Format for UInt with write(value, buffer, start) {
+pub impl Format for UInt32 with fn write(value, buffer, start) {
   if value == 0 {
-    buffer[start + 0] = '0'
+    buffer[start + 0] = b'0'
     return 1
   }
   let mut value = value
   let mut offset = start
   while value > 0 {
     let rem = value % 10
-    buffer[offset] = UInt::to_byte(rem + b'0'.to_uint())
+    buffer[offset] = UInt32::to_byte(rem + b'0'.to_uint())
     value /= 10
     offset += 1
   }
@@ -31,12 +31,12 @@ pub impl Format for UInt with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl Format for UInt with count(_) -> Int {
+pub impl Format for UInt32 with fn count(_) -> Int32 {
   UInt_Digits10
 }
 
 ///|
-pub impl LittleEndianFormat for UInt with write(value, buffer, start) {
+pub impl LittleEndianFormat for UInt32 with fn write(value, buffer, start) {
   let b0 = (value & 0xFF).to_byte()
   let b1 = ((value >> 8) & 0xFF).to_byte()
   let b2 = ((value >> 16) & 0xFF).to_byte()
@@ -50,12 +50,12 @@ pub impl LittleEndianFormat for UInt with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl LittleEndianFormat for UInt with count(_) -> Int {
+pub impl LittleEndianFormat for UInt32 with fn count(_) -> Int32 {
   4
 }
 
 ///|
-pub impl BigEndianFormat for UInt with write(value, buffer, start) {
+pub impl BigEndianFormat for UInt32 with fn write(value, buffer, start) {
   let b0 = ((value >> 24) & 0xFF).to_byte()
   let b1 = ((value >> 16) & 0xFF).to_byte()
   let b2 = ((value >> 8) & 0xFF).to_byte()
@@ -69,14 +69,14 @@ pub impl BigEndianFormat for UInt with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl BigEndianFormat for UInt with count(_) -> Int {
+pub impl BigEndianFormat for UInt32 with fn count(_) -> Int32 {
   4
 }
 
 ///|
-pub impl HexLowerFormat for UInt with write(value, buffer, start) {
+pub impl HexLowerFormat for UInt32 with fn write(value, buffer, start) {
   if value == 0 {
-    buffer[start + 0] = '0'
+    buffer[start + 0] = b'0'
     return 1
   }
   let mut value = value
@@ -93,14 +93,14 @@ pub impl HexLowerFormat for UInt with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl HexLowerFormat for UInt with count(_) -> Int {
+pub impl HexLowerFormat for UInt32 with fn count(_) -> Int32 {
   8
 }
 
 ///|
-pub impl HexUpperFormat for UInt with write(value, buffer, start) {
+pub impl HexUpperFormat for UInt32 with fn write(value, buffer, start) {
   if value == 0 {
-    buffer[start + 0] = '0'
+    buffer[start + 0] = b'0'
     return 1
   }
   let mut value = value
@@ -117,6 +117,6 @@ pub impl HexUpperFormat for UInt with write(value, buffer, start) {
 
 ///|
 /// supremum
-pub impl HexUpperFormat for UInt with count(_) -> Int {
+pub impl HexUpperFormat for UInt32 with fn count(_) -> Int32 {
   8
 }
