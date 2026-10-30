@@ -2,10 +2,12 @@
 struct Memory(FixedArray[Byte])
 
 ///|
-pub fn Memory::op_get(self : Memory, index : Int32) -> Byte = "%fixedarray.unsafe_get"
+#alias("_[_]")
+pub fn Memory::get(self : Memory, index : Int32) -> Byte = "%fixedarray.unsafe_get"
 
 ///|
-pub fn Memory::op_set(self : Memory, index : Int32, value : Byte) -> Unit = "%fixedarray.unsafe_set"
+#alias("_[_]=_")
+pub fn Memory::set(self : Memory, index : Int32, value : Byte) -> Unit = "%fixedarray.unsafe_set"
 
 ///|
 pub fn Memory::length(self : Memory) -> Int32 = "%fixedarray.length"

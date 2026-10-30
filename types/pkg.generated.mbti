@@ -30,10 +30,12 @@ pub fn[T : LittleEndianFormat] LittleEndian::write(Self[T], Memory, Int32) -> In
 pub impl[T : LittleEndianFormat] Format for LittleEndian[T]
 
 type Memory
+#alias("_[_]")
+pub fn Memory::get(Self, Int32) -> Byte
 pub fn Memory::length(Self) -> Int32
 pub fn Memory::make(Int32, Byte) -> Self
-pub fn Memory::op_get(Self, Int32) -> Byte
-pub fn Memory::op_set(Self, Int32, Byte) -> Unit
+#alias("_[_]=_")
+pub fn Memory::set(Self, Int32, Byte) -> Unit
 
 // Type aliases
 
