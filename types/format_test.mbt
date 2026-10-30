@@ -274,7 +274,7 @@ test "format_write format dsl error" {
     memory_to_string(buffer, offset)
   }
 
-  inspect(
+  debug_inspect(
     Ok(str(b"hello {} world", [])) catch {
       e => Err(e)
     },
@@ -282,7 +282,7 @@ test "format_write format dsl error" {
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),
   )
-  inspect(
+  debug_inspect(
     Ok(str(b"hello {} world", [1, 2])) catch {
       e => Err(e)
     },
@@ -315,7 +315,7 @@ test "format_count" {
   inspect(@fmt.format_count(b"Data: {}", [b"test"]), content="10") // "Data: " (6) + 4 (length of "test") + "" (0)
 
   // Test error cases - mismatched placeholder count
-  inspect(
+  debug_inspect(
     Ok(@fmt.format_count(b"Hello {} world", [])) catch {
       e => Err(e)
     },
@@ -323,7 +323,7 @@ test "format_count" {
       #|Err(DebugError("data.length() mismatch with placeholder's count"))
     ),
   )
-  inspect(
+  debug_inspect(
     Ok(@fmt.format_count(b"Hello {} world", [1, 2])) catch {
       e => Err(e)
     },
@@ -495,4 +495,12 @@ test "HexLower UInt" {
   inspect(memory_to_string(buffer, offset), content="0")
   let offset = @fmt.Format::write(@fmt.HexLower(0xABCDEFU), buffer, 0)
   inspect(memory_to_string(buffer, offset), content="abcdef")
+}
+
+///|
+test "Memory accessors agree with indexing operators" {
+  let memory = @fmt.Memory::make(1, b'\x00')
+  memory.set(0, b'\x2a')
+  assert_eq(memory.get(0), b'\x2a')
+  assert_eq(memory[0], b'\x2a')
 }

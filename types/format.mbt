@@ -12,10 +12,12 @@ pub(open) trait Format {
 
 ///|
 fn find_first_placeholder(format : Bytes) -> Int32? {
-  loop (0, format[:]) {
-    (_, []) => None
-    (index, [b'{', b'}', ..]) => Some(index)
-    (index, [_, .. cs]) => continue (index + 1, cs)
+  for index = 0, rest = format[:] {
+    match rest {
+      [] => break None
+      [b'{', b'}', ..] => break Some(index)
+      [_, .. cs] => continue index + 1, cs
+    }
   }
 }
 
@@ -25,18 +27,23 @@ fn split_format(format : BytesView) -> (Array[BytesView], Int32) {
   let snippets = []
   let mut start = 0
   let mut index = 0
-  loop format[:] {
-    [] => snippets.push(format[start:index])
-    [b'{', b'}', .. cs] => {
-      snippets.push(format[start:index])
-      start = index + 2
-      index += 2
-      count += 1
-      continue cs
-    }
-    [_, .. cs] => {
-      index += 1
-      continue cs
+  for rest = format[:] {
+    match rest {
+      [] => {
+        snippets.push(format[start:index])
+        break
+      }
+      [b'{', b'}', .. cs] => {
+        snippets.push(format[start:index])
+        start = index + 2
+        index += 2
+        count += 1
+        continue cs
+      }
+      [_, .. cs] => {
+        index += 1
+        continue cs
+      }
     }
   }
   (snippets, count)
